@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdventOfCode2022.Tasks.Task4
+﻿namespace AdventOfCode2022.Tasks.Task4
 {
     public class ElfPair
     {

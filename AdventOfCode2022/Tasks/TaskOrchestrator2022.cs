@@ -1,6 +1,4 @@
 ﻿using AdventOfCode2022.Helpers;
-using AdventOfCode2022.Models;
-using AdventOfCode2022.Submarines;
 using AdventOfCode2022.Tasks.Task1;
 using AdventOfCode2022.Tasks.Task2;
 using AdventOfCode2022.Tasks.Task3;
