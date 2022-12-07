@@ -5,6 +5,7 @@ using AdventOfCode2022.Tasks.Task3;
 using AdventOfCode2022.Tasks.Task4;
 using AdventOfCode2022.Tasks.Task5;
 using AdventOfCode2022.Tasks.Task6;
+using AdventOfCode2022.Tasks.Task7;
 
 namespace AdventOfCode2022.Tasks
 {
@@ -110,6 +111,25 @@ namespace AdventOfCode2022.Tasks
 
             var letterNumber = Decoder.GetFirstMarkerPosition(comunicationString, uniqueLetters, out var markerOut);
             Console.WriteLine($"Found marker: {markerOut} with {uniqueLetters} unique letters after {letterNumber} letters");
+
+        }
+
+        public static void Task7()
+        {
+            var data = DataParserHelper.GetInputData("data7_22.txt").Skip(1).ToList();
+            var rootNode = new FileSystemNode(null, "/");
+            var filesystem = new ProgramExecuter(rootNode);
+            foreach(var dataLine in data)
+            {
+                filesystem.ExecuteDataLine(dataLine);
+            }
+            //filesystem.PrintStructure();
+            //filesystem.PrintAllDirsWithMinSize(100000);
+            filesystem.PrintAllDirsWithMaxSize(100000);
+            filesystem.SetFreeDiskSpace();
+            var smallestDeletable = filesystem.GetSmallestToDelete(rootNode.Children);
+            Console.WriteLine($"The smallest directory that is large enough is {smallestDeletable} byte large");
+
 
         }
     }
