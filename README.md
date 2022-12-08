@@ -14,7 +14,7 @@ As I have no intention of waking up before work to solve puzzles, my name won't 
 - 4  **
 - 5  **
 - 6  **
-- 7
+- 7  **
 - 8
 - 9
 - 10
