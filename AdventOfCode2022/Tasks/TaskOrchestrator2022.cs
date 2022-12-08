@@ -129,8 +129,19 @@ namespace AdventOfCode2022.Tasks
             filesystem.SetFreeDiskSpace();
             var smallestDeletable = filesystem.GetSmallestToDelete(rootNode.Children);
             Console.WriteLine($"The smallest directory that is large enough is {smallestDeletable} byte large");
+        }
 
-
+        public static void Task8()
+        {
+            var data = DataParserHelper.GetInputData("data8_22.txt");
+            var treeGrid = new TreeGrid(data);
+            treeGrid.PrintTreeMatrix();
+            //Console.WriteLine($"Tree top left (1,1): Left: {treeGrid.CanSeeFromLeft(1, 1)}, Right: {treeGrid.CanSeeFromRight(1,1)}, Top: {treeGrid.CanSeeFromTop(1,1)}, Bottom: {treeGrid.CanSeeFromBottom(1,1)}");
+            //Console.WriteLine($"Tree top middle (2,1): Left: {treeGrid.CanSeeFromLeft(2, 1)}, Right: {treeGrid.CanSeeFromRight(2, 1)}, Top: {treeGrid.CanSeeFromTop(2, 1)}, Bottom: {treeGrid.CanSeeFromBottom(2, 1)}");
+            //Console.WriteLine($"Tree middle left (1,2): Left: {treeGrid.CanSeeFromLeft(1, 2)}, Right: {treeGrid.CanSeeFromRight(1, 2)}, Top: {treeGrid.CanSeeFromTop(1, 2)}, Bottom: {treeGrid.CanSeeFromBottom(1, 2)}");
+            var ount = treeGrid.CountOfInnerTreesThatCanBeSeen();
+            var outer = treeGrid.TreesInPerimiter();
+            Console.WriteLine($"{ount}, {outer}, total: {ount + outer}");
         }
     }
 }
