@@ -34,16 +34,21 @@ namespace AdventOfCode2022.Tasks
 
         public int FindMaxInnerSceenicScore()
         {
-            var count = 0;
+            var maxSceenicView = 0;
             for (int i = 1; i < Height - 1; i++)
             {
                 for (int j = 1; j < Width - 1; j++)
                 {
-                    if (CanBeSeen(j, i))
-                        count++;
+                    var top = ViewToTop(j, i);
+                    var bottom = ViewToBottom(j, i);
+                    var left = ViewToLeft(j, i);
+                    var right = ViewToRight(j, i);
+                    var currentView = top * bottom * left * right;
+                    if (currentView > maxSceenicView)
+                        maxSceenicView = currentView;
                 }
             }
-            return count;
+            return maxSceenicView;
         }
 
         public int CountOfInnerTreesThatCanBeSeen()
@@ -73,18 +78,48 @@ namespace AdventOfCode2022.Tasks
             return false;
 
         }
+        public int ViewToLeft(int width, int height)
+        {
+            var currentView = 1;
+            var treeToTest = TreeMatrix[width, height];
+            for (var i = width - 1; i >= 0; i--)
+            {
+                if (treeToTest > TreeMatrix[i, height])
+                {
+                    currentView++;
+                    continue;
+                }
+                return currentView;
+            }
+            return currentView- 1;
+        }
 
         public bool CanSeeFromLeft(int width, int height)
         {
             var treeToTest = TreeMatrix[width, height];
             for (var i = width-1; i >= 0; i--)
             {
-                var test = TreeMatrix[i, height];
                 if (treeToTest > TreeMatrix[i, height])
                     continue;
                 return false;
             }
             return true;
+        }
+
+        public int ViewToRight(int width, int height)
+        {
+            var currentView = 1;
+            var treeToTest = TreeMatrix[width, height];
+            for (var i = width + 1; i <= Width - 1; i++)
+            {
+                if (treeToTest > TreeMatrix[i, height])
+                {
+                    currentView++;
+                    continue;
+                }
+                return currentView;
+            }
+            return currentView -1;
         }
 
         public bool CanSeeFromRight(int width, int height)
@@ -99,6 +134,22 @@ namespace AdventOfCode2022.Tasks
             return true;
         }
 
+        public int ViewToTop(int width, int height)
+        {
+            var currentView = 1;
+            var treeToTest = TreeMatrix[width, height];
+            for (var i = height - 1; i >= 0; i--)
+            {
+                if (treeToTest > TreeMatrix[width, i])
+                {
+                    currentView++;
+                    continue;
+                }
+                return currentView;
+            }
+            return currentView -1;
+        }
+
         public bool CanSeeFromTop(int width, int height)
         {
             var treeToTest = TreeMatrix[width, height];
@@ -109,6 +160,22 @@ namespace AdventOfCode2022.Tasks
                 return false;
             }
             return true;
+        }
+
+        public int ViewToBottom(int width, int height)
+        {
+            var currentView = 1;
+            var treeToTest = TreeMatrix[width, height];
+            for (var i = height + 1; i <= Height - 1; i++)
+            {
+                if (treeToTest > TreeMatrix[width, i])
+                {
+                    currentView++;
+                    continue;
+                }
+                return currentView;
+            }
+            return currentView-1;
         }
 
         public bool CanSeeFromBottom(int width, int height)
