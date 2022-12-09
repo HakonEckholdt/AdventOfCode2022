@@ -6,6 +6,7 @@ using AdventOfCode2022.Tasks.Task4;
 using AdventOfCode2022.Tasks.Task5;
 using AdventOfCode2022.Tasks.Task6;
 using AdventOfCode2022.Tasks.Task7;
+using AdventOfCode2022.Tasks.Task9;
 
 namespace AdventOfCode2022.Tasks
 {
@@ -141,6 +142,14 @@ namespace AdventOfCode2022.Tasks
             var score = treeGrid.FindMaxInnerSceenicScore();
 
             Console.WriteLine($"{count}, {outer}, total: {count + outer}, Score = {score}");
+        }
+
+        public static void Task9()
+        {
+            var data = DataParserHelper.GetInputData("data9_22.txt");
+            var rope = new Knot();
+            rope.ExecuteInput(data);
+            rope.PrintTailLog();
         }
     }
 }
