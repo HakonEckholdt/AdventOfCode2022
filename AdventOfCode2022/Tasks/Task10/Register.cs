@@ -9,55 +9,44 @@ namespace AdventOfCode2022.Tasks.Task10
     public class Register
     {
         public int XRegisterValue { get; set; } = 1;
-        public int Cycle { get; set; }
-        public Dictionary<int, int> RegisterValueLog { get; set; } = new Dictionary<int, int>();
+        public int CurrentCycleCount { get; set; }
         public List<string> Program { get; set; }
+        private int ProgramPointer = 0;
+        private Func<int, int>? NextAction = null;
 
         public void LoadProgram(List<string> program)
         {
-            Cycle = 0;
+            CurrentCycleCount = 0;
             Program = program;
         }
 
-        public void ExecuteProgram()
+        public bool ExecuteCycle()
         {
-            var programPointer = 0;
-            while(programPointer < Program.Count())
+            if(NextAction != null)
             {
-                var action = Program[programPointer].Split(" ");
-                switch (action[0])
-                {
-                    case "noop":
-                        Cycle++;
-                        break;
-                    case "addx":
-                        Cycle++;
-                        if ((Cycle - 20) % 40 == 0)
-                            RecordCycleRegistryValue();
-                        Cycle++;
-                        if ((Cycle - 20) % 40 == 0)
-                            RecordCycleRegistryValue();
-                        XRegisterValue += int.Parse(action[1]);
-                        break;
-                }
-                programPointer++;
+                XRegisterValue = NextAction(XRegisterValue);
+                NextAction = null;
             }
-        }
-
-        private void RecordCycleRegistryValue()
-        {
-            RegisterValueLog.Add(Cycle, XRegisterValue);
-        }
-
-        public void PrintCycleRegisterValueLog()
-        {
-            var totalSignal = 0;
-            foreach (var (key, value) in RegisterValueLog)
+            var action = Program[ProgramPointer].Split(" ");
+            switch (action[0])
             {
-                Console.WriteLine($"Cycle: {key}, X-registry: {value}, SignalStrenght = {key*value}");
-                totalSignal += key * value;
+                case "noop":
+                    ProgramPointer++;
+                    break;
+                case "addx":
+                    CurrentCycleCount++;
+                    if (CurrentCycleCount == 2)
+                    {
+                        NextAction = (x) => x + int.Parse(action[1]);
+                        CurrentCycleCount = 0;
+                        ProgramPointer++;
+                    }
+                    break;
             }
-            Console.WriteLine($"Total SignalStrenght: {totalSignal}");
+            if (ProgramPointer > (Program.Count - 1))
+                return false;
+            return true;
+
         }
 
     }
