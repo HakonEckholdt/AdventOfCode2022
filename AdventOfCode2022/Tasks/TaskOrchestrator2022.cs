@@ -147,7 +147,9 @@ namespace AdventOfCode2022.Tasks
         public static void Task9()
         {
             var data = DataParserHelper.GetInputData("data9_22.txt");
-            var rope = new Knot();
+            Console.WriteLine("How many knots in Rope? (number)");
+            var numberOfKnots = int.Parse(Console.ReadLine());
+            var rope = new Rope(numberOfKnots);
             rope.ExecuteInput(data);
             rope.PrintTailLog();
         }

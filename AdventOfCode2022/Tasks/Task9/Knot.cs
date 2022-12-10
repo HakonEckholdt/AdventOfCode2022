@@ -2,11 +2,10 @@
 
 public class Knot
 {
-    public Coordinate HeadPossition { get; set; } = new Coordinate(0, 0);
-    public Coordinate TailPossition { get; set; } = new Coordinate(0, 0);
+    public Coordinate Possition { get; set; } = new Coordinate(0, 0);
     public Coordinate StartPossition { get; set; } = new Coordinate(0, 0);
-    public List<Coordinate> TailVisitedLog { get; set; } = new List<Coordinate>() { new Coordinate(0, 0) };
     public Knot TailingKnot { get; set; }
+    public Knot LeadingKnot { get; set; }
 
     public Knot()
     {
@@ -18,71 +17,60 @@ public class Knot
         TailingKnot = knot;
     }
 
-    public void ExecuteInput(List<string> data)
-    {
-        foreach (var dataline in data)
-        {
-            var datalineArray = dataline.Split(" ");
-            for (var i = 0; i < int.Parse(datalineArray[1]); i++)
-            {
-                MoveHeadOne(datalineArray[0]);
-            }
-        }
-    }
 
-    public void MoveHeadOne(string direction)
+    public void MoveHeadOne(string direction, bool checkTail = true)
     {
         switch (direction)
         {
             case "R":
-                MoveRight();
+                MoveRight(checkTail);
                 break;
             case "L":
-                MoveLeft();
+                MoveLeft(checkTail);
                 break;
             case "U":
-                MoveUp();
+                MoveUp(checkTail);
                 break;
             case "D":
-                MoveDown();
+                MoveDown(checkTail);
                 break;
             default:
                 throw new NotImplementedException();
         }
     }
 
-    public void MoveRight()
+    public void MoveRight(bool checkTail = true)
     {
-        HeadPossition.Xpossition++;
+        Possition.Xpossition++;
         var test = TailTouchingHead();
-        if (!TailTouchingHead())
+        if (checkTail && !TailTouchingHead())
         {
             TailCatchUp();
         }
     }
 
-    public void MoveLeft()
+    public void MoveLeft(bool checkTail = true)
     {
-        HeadPossition.Xpossition--;
-        if (!TailTouchingHead())
+        Possition.Xpossition--;
+        if (checkTail && !TailTouchingHead())
         {
             TailCatchUp();
         }
     }
 
-    public void MoveUp()
+    public void MoveUp(bool checkTail = true)
     {
-        HeadPossition.Ypossition++;
-        if (!TailTouchingHead())
+        Possition.Ypossition++;
+        if (checkTail && !TailTouchingHead())
         {
             TailCatchUp();
         }
     }
 
-    public void MoveDown()
+    public void MoveDown(bool checkTail = true)
     {
-        HeadPossition.Ypossition--;
-        if (!TailTouchingHead())
+        Possition.Ypossition--;
+        if (checkTail && !TailTouchingHead())
         {
             TailCatchUp();
         }
@@ -90,45 +78,27 @@ public class Knot
 
     private void TailCatchUp()
     {
+        if (TailingKnot == null)
+            return;
         if (TailInSameCol(out _))
         {
-            TailPossition.Ypossition += Math.Sign(HeadPossition.Ypossition - TailPossition.Ypossition);
+            var moveAction = Possition.Ypossition - TailingKnot.Possition.Ypossition > 0 ? "U" : "D";
+            TailingKnot.MoveHeadOne(moveAction);
+
         } else if (TailInSameRow(out _))
         {
-            TailPossition.Xpossition += Math.Sign(HeadPossition.Xpossition - TailPossition.Xpossition);
+            var moveAction = Possition.Xpossition - TailingKnot.Possition.Xpossition > 0 ? "R" : "L";
+            TailingKnot.MoveHeadOne(moveAction);
         } else
         {
-            TailPossition.Xpossition += Math.Sign(HeadPossition.Xpossition - TailPossition.Xpossition);
-            TailPossition.Ypossition += Math.Sign(HeadPossition.Ypossition - TailPossition.Ypossition);
+            var moveAction = Possition.Ypossition - TailingKnot.Possition.Ypossition > 0 ? "U" : "D";
+            TailingKnot.MoveHeadOne(moveAction, false);
+            moveAction = Possition.Xpossition - TailingKnot.Possition.Xpossition > 0 ? "R" : "L";
+            TailingKnot.MoveHeadOne(moveAction);
         }
-        UpdateTailLog();
     }
 
-    public void UpdateTailLog()
-    {
-        if (TailVisitedLog.Any(coord => TailPossition.IsEqual(coord)))
-            return;
-        TailVisitedLog.Add(new Coordinate(TailPossition));
-    }
 
-    public void PrintTailLog()
-    {
-        var maxCol = (TailVisitedLog.Max(x => x.Xpossition));
-        var maxRow = (TailVisitedLog.Max(y => y.Ypossition));
-        for (int r = maxRow; r >= 0; r--)
-        {
-            for (int c = 0; c <= maxCol; c++)
-            {
-                if (r == 0 && c == 0)
-                    Console.Write("S");
-                else
-                    Console.Write(TailVisitedLog.Any(x => x.Xpossition == c && x.Ypossition == r) ? "#" : ".");
-            }
-            Console.Write("\n");
-        }
-
-        Console.WriteLine($"Tail visited {TailVisitedLog.Count()} coordinates");
-    }
 
     public bool TailTouchingHead()
     {
@@ -137,24 +107,28 @@ public class Knot
 
     private bool TailInSameRow(out int distance)
     {
-        distance = HeadPossition.Ypossition - TailPossition.Ypossition;
+        distance = Possition.Ypossition - TailingKnot.Possition.Ypossition;
         return distance == 0;
     }
 
     private bool TailInSameCol(out int distance)
     {
-        distance = HeadPossition.Xpossition - TailPossition.Xpossition;
+        distance = Possition.Xpossition - TailingKnot.Possition.Xpossition;
         return distance == 0;
     }
 
     private bool IsHorizontalyClose()
     {
-        return (HeadPossition.Xpossition + 1 >= TailPossition.Xpossition) && (HeadPossition.Xpossition - 1 <= TailPossition.Xpossition);
+        if (TailingKnot == null)
+            return true;
+        return (Possition.Xpossition + 1 >= TailingKnot.Possition.Xpossition) && (Possition.Xpossition - 1 <= TailingKnot.Possition.Xpossition);
     }
 
     private bool IsVerticallyClose()
     {
-        return (HeadPossition.Ypossition + 1 >= TailPossition.Ypossition) && (HeadPossition.Ypossition - 1 <= TailPossition.Ypossition);
+        if (TailingKnot == null)
+            return true;
+        return (Possition.Ypossition + 1 >= TailingKnot.Possition.Ypossition) && (Possition.Ypossition - 1 <= TailingKnot.Possition.Ypossition);
     }
 
 }
