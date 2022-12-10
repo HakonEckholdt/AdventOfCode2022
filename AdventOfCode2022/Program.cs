@@ -14,7 +14,8 @@ namespace AdventOfCode2022
             {6, (name: "Oppgave 6", action: () => TaskOrchestrator2022.Task6())},
             {7, (name: "Oppgave 7", action: () => TaskOrchestrator2022.Task7())},
             {8, (name: "Oppgave 8", action: () => TaskOrchestrator2022.Task8())},
-            {9, (name: "Oppgave 9", action: () => TaskOrchestrator2022.Task9())}
+            {9, (name: "Oppgave 9", action: () => TaskOrchestrator2022.Task9())},
+            {10, (name: "Oppgave 10", action: () => TaskOrchestrator2022.Task10())}
         };
 
         public static void Main(string[] args)

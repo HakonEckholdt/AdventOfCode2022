@@ -1,5 +1,6 @@
 ﻿using AdventOfCode2022.Helpers;
 using AdventOfCode2022.Tasks.Task1;
+using AdventOfCode2022.Tasks.Task10;
 using AdventOfCode2022.Tasks.Task2;
 using AdventOfCode2022.Tasks.Task3;
 using AdventOfCode2022.Tasks.Task4;
@@ -152,6 +153,15 @@ namespace AdventOfCode2022.Tasks
             var rope = new Rope(numberOfKnots);
             rope.ExecuteInput(data);
             rope.PrintTailLog();
+        }
+
+        public static void Task10()
+        {
+            var data = DataParserHelper.GetInputData("data10_22.txt");
+            var register = new Register();
+            register.LoadProgram(data);
+            register.ExecuteProgram();
+            register.PrintCycleRegisterValueLog();
         }
     }
 }
