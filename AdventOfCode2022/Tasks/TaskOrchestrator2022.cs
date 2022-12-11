@@ -1,6 +1,7 @@
 ﻿using AdventOfCode2022.Helpers;
 using AdventOfCode2022.Tasks.Task1;
 using AdventOfCode2022.Tasks.Task10;
+using AdventOfCode2022.Tasks.Task11;
 using AdventOfCode2022.Tasks.Task2;
 using AdventOfCode2022.Tasks.Task3;
 using AdventOfCode2022.Tasks.Task4;
@@ -162,6 +163,19 @@ namespace AdventOfCode2022.Tasks
             crt.ExecuteCRTProgram(data);
             crt.PrintCycleRegisterValueLog();
             crt.PrintScreen();
+        }
+
+        public static void Task11()
+        {
+            var data = DataParserHelper.GetInputData("data11_22.txt");
+            var currentMonkeyData = new List<string>();
+
+            Console.WriteLine("How many rounds should the monkeys throw items? (number)");
+            var numberOfRounds = int.Parse(Console.ReadLine());
+            var monkeyRing = new MonkeyRing(data);
+            monkeyRing.ExecuteMonkeyRing(numberOfRounds);
+            monkeyRing.PrintAllPassings();
+            monkeyRing.PrintLevelOfMonkeyBussiness();
         }
     }
 }
