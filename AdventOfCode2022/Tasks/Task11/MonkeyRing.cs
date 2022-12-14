@@ -27,12 +27,13 @@ namespace AdventOfCode2022.Tasks.Task11
 
         public void ExecuteMonkeyRing(int numberOfRounds)
         {
+            var lcm = Monkeys.Select(x => x.MonkeyTestNumber).Aggregate((S, val) => S * val / gcd(S, val));
             for (var i = 0; i < numberOfRounds; i++)
             {
                 Console.WriteLine($"Round {i + 1} done");
                 foreach (var monkey in Monkeys)
                 {
-                    var monkeyPassings = monkey.ExecuteMonkeyBussiness();
+                    var monkeyPassings = monkey.ExecuteMonkeyBussiness(lcm);
                     PassItems(monkeyPassings);
                 }
             }
@@ -51,6 +52,18 @@ namespace AdventOfCode2022.Tasks.Task11
             foreach(var monkey in Monkeys)
             {
                 Console.WriteLine(monkey.ItemsInspected);
+            }
+        }
+
+        static int gcd(int n1, int n2)
+        {
+            if (n2 == 0)
+            {
+                return n1;
+            }
+            else
+            {
+                return gcd(n2, n1 % n2);
             }
         }
 

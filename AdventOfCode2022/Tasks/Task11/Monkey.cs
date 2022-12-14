@@ -24,13 +24,14 @@ namespace AdventOfCode2022.Tasks.Task11
             MonkeyThrowFalse = int.Parse(monkeyConstructor[5].Trim().Substring(26));
         }
 
-        public List<(int monkey, int worryLevel)> ExecuteMonkeyBussiness()
+        public List<(int monkey, int worryLevel)> ExecuteMonkeyBussiness(int devisor)
         {
             var passedOnItems = new List<(int monkey, int worryLevel)>();
             foreach(var worryLevel in ItemsWorryLevel)
             {
                 var newWorryLevel = MonkeyOperation(worryLevel);
-                newWorryLevel /= 3;
+                newWorryLevel %= devisor;
+                //newWorryLevel %= 10000;
                 if (newWorryLevel % MonkeyTestNumber == 0)
                     passedOnItems.Add((MonkeyThrowTrue, newWorryLevel));
                 else
