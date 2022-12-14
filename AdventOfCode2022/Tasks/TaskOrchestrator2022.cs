@@ -2,6 +2,7 @@
 using AdventOfCode2022.Tasks.Task1;
 using AdventOfCode2022.Tasks.Task10;
 using AdventOfCode2022.Tasks.Task11;
+using AdventOfCode2022.Tasks.Task12;
 using AdventOfCode2022.Tasks.Task2;
 using AdventOfCode2022.Tasks.Task3;
 using AdventOfCode2022.Tasks.Task4;
@@ -176,6 +177,51 @@ namespace AdventOfCode2022.Tasks
             monkeyRing.ExecuteMonkeyRing(numberOfRounds);
             monkeyRing.PrintAllPassings();
             monkeyRing.PrintLevelOfMonkeyBussiness();
+        }
+
+        public static void Task12()
+        {
+            var data = DataParserHelper.GetIntFromString("data12_22.txt");
+            var startX = data.FindIndex(x => x.Contains(44));
+            var startY = data[startX].FindIndex(y => y == 44);
+            var endX = data.FindIndex(x => x.Contains(30));
+            var endY = data[endX].FindIndex(y => y == 30);
+            data[endX][endY] = 25;
+            var algorithm = new Astar(startX, startY, endX, endY, data);
+            algorithm.Solve();
+            var possibleStarts = new List<(int x, int y)>();
+            for(var row = 0; row < data.Count; row++)
+            {
+                for(var col = 0; col < data[0].Count; col ++)
+                {
+                    var height = data[row][col];
+                    
+                    if (height == 0)
+                    {
+                        possibleStarts.Add((row, col));
+                    }
+                }
+            }
+            var currentLowest = int.MaxValue;
+            var tracker = 0;
+            foreach(var start in possibleStarts)
+            {
+                algorithm = new Astar(start.x, start.y, endX, endY, data);
+                var currentVal = algorithm.Solve();
+                if (currentVal < currentLowest)
+                {
+                    currentLowest = currentVal;
+                    Console.WriteLine(currentLowest);
+                }
+                tracker++;
+                if (tracker%10==0)
+                {
+                    Console.WriteLine($"{((tracker* 100) / possibleStarts.Count)}% done");
+                }
+                
+            }
+            Console.WriteLine("Done");
+            Console.WriteLine(currentLowest);
         }
     }
 }
